@@ -2,7 +2,7 @@ import logging
 import rdflib
 from rdflib import Graph, URIRef
 from SPARQLWrapper import SPARQLWrapper, RDF
-from rdflib.plugins.memory import IOMemory
+from rdflib.plugins.stores.memory import Memory
 
 logging.basicConfig()
  
@@ -38,9 +38,8 @@ sparql.setQuery(construct_query)
 sparql.setReturnFormat(RDF)
 
 
-memory_store=IOMemory()
-graph_id=URIRef('http://www.semanticweb.org/store/movie')
-g = Graph(store=memory_store, identifier=graph_id)
+g = Graph(store=Memory(), identifier=URIRef('http://www.semanticweb.org/store/movie'))
+
 rdflib.plugin.register('sparql', rdflib.query.Processor, 'rdfextras.sparql.processor', 'Processor')
 rdflib.plugin.register('sparql', rdflib.query.Result, 'rdfextras.sparql.query', 'SPARQLQueryResult')
  

@@ -17,8 +17,8 @@ WHERE { ?d rdf:type dis:disease .
         ?country dis:name ?co_name .
       }"""
 
-g=rdflib.Graph()
-result=g.parse("diseases_populated_3.owl", "xml")
+g = rdflib.Graph()
+result = g.parse("diseases/new_populated_models/diseases_populated_4.owl", "xml")
 print("graph has %s statements.\n" % len(g))
 
 print ('{0:25s} {1:20s} {2:10s}'.format("Environmental Disease","Cause", "Country"))

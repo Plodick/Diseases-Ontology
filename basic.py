@@ -1,16 +1,16 @@
-
 # -----------------  Infectious  ----------------- #
 
 import logging
+
 import rdflib
+from SPARQLWrapper import SPARQLWrapper, RDFXML, RDF, TURTLE, XML
 from rdflib.graph import Graph, URIRef
-from SPARQLWrapper import SPARQLWrapper, RDF
-from rdflib.plugins.memory import IOMemory
+from rdflib.plugins.stores.memory import Memory
 
 logging.basicConfig()
- 
+
 sparql = SPARQLWrapper("https://query.wikidata.org/sparql")
-construct_query="""
+construct_query = """
       PREFIX dis: <http://www.semanticweb.org/dorsa/ontologies/diseases.owl#>
       PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
       PREFIX wdt: <http://www.wikidata.org/prop/direct/>
@@ -90,13 +90,10 @@ construct_query="""
 sparql.setQuery(construct_query)
 sparql.setReturnFormat(RDF)
 
-memory_store=IOMemory()
-graph_id=URIRef('http://www.semanticweb.org/store/diseases')
-g = Graph(store=memory_store, identifier=graph_id)
+g = Graph(store=Memory(), identifier=URIRef('http://www.semanticweb.org/store/diseases'))
 rdflib.plugin.register('sparql', rdflib.query.Processor, 'rdfextras.sparql.processor', 'Processor')
 rdflib.plugin.register('sparql', rdflib.query.Result, 'rdfextras.sparql.query', 'SPARQLQueryResult')
 
 g = sparql.query().convert()
 g.parse("diseases_rdf.owl", format="xml")
 g.serialize("diseases_populated_1.owl", "xml")
-
